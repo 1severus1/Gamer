@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{D7A8E721-43C2-0F76-BFB7-A39D48C44473}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ActionRogueLike",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
