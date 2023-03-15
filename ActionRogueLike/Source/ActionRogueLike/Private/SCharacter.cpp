@@ -2,6 +2,8 @@
 
 
 #include "SCharacter.h"
+
+#include "SMagicProjectile.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -49,6 +51,18 @@ void ASCharacter::MoveRight(float value)
 	AddMovementInput(FRotationMatrix(CtrlRot).GetScaledAxis(EAxis::Y),value);
 }
 
+void ASCharacter::PrimaryAttack()
+{
+	FVector FireLocation= GetMesh()->GetSocketLocation("Muzzle_01");
+	
+	FTransform SpawnTM=FTransform(GetControlRotation(),FireLocation);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	GetWorld()->SpawnActor<AActor>(ProjectileClass,SpawnTM,SpawnParams);
+}
+
 // Called every frame
 void ASCharacter::Tick(float DeltaTime)
 {
@@ -64,9 +78,11 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveForward",this,&ASCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight",this,&ASCharacter::MoveRight);
 	
-	// Using Controller Rotation, whitch won't effect the character trans directly
+	// Using Controller Rotation, which won't effect the character trans directly
 	PlayerInputComponent->BindAxis("Turn",this,&APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp",this,&APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this,&ASCharacter::PrimaryAttack);
 	
 	
 	
